@@ -41,10 +41,12 @@ capture.on( 'connection', function( socket ) {
 
     console.log( stats );
     consumer.emit( 'stats-updated', stats );
+    consumer.emit( 'create', stats );
   } );
 
   socket.on( 'disconnect', function() {
     // Clear down stats for lost socket
+    // comment this line if you want to see more grid rows
     --stats.connections;
 
     stats.touch -= ( socketData[ socket.id ].touch? 1 : 0 );
@@ -62,6 +64,7 @@ var consumer = io.of( '/consumer' );
 consumer.on( 'connection', function( socket ) {
   // Send an update to the newly connected consumer socket
   socket.emit( 'stats-updated', stats );
+  socket.emit( 'create', stats );
 } );
 
 server.listen( 3000, function(){
