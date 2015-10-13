@@ -30,17 +30,17 @@
 
 
     // this function is called by Cordova when the application is loaded by the device
-    document.addEventListener('deviceready', function () {  
-      
+    document.addEventListener('deviceready', function () {
+
       // hide the splash screen as soon as the app is ready. otherwise
       // Cordova will wait 5 very long seconds to do it for you.
       navigator.splashscreen.hide();
 
       app = new kendo.mobile.Application(document.body, {
-        
+
         // you can change the default transition (slide, zoom or fade)
         transition: 'slide',
-        
+
         // comment out the following line to get a UI which matches the look
         // and feel of the operating system
         skin: 'flat',
@@ -103,84 +103,60 @@ function InitializeGrid() {
 //        ws.send(JSON.stringify(request));
 //    }
 
-    $("#notification").kendoNotification({
-        width: "100%",
-        position: {
-            top: 0,
-            left: 0
-        }
-    });
+    // $("#notification").kendoNotification({
+    //     width: "100%",
+    //     position: {
+    //         top: 0,
+    //         left: 0
+    //     }
+    // });
 
     $("#grid").kendoGrid({
         height: 550,
-        autoBind: false,
+        //autoBind: false,
         editable: true,
         sortable: true,
         columns: [
-                    { field: "UnitPrice" },
-                    { field: "ProductName" },
-                    { command: "destroy", width: 150 }
+                    { field: "connections", title: "Connections" },
+                    { field: "touch", title: "Touch" },
+                    { field: "video", title: "Video" }
                 ],
         toolbar: ["create"],
         dataSource: {
             // Handle the push event to display notifications when push updates arrive
             data: products,
             push: function (e) {
-                var notification = $("#notification").data("kendoNotification");
-                notification.success(e.type);
+                //var notification = $("#notification").data("kendoNotification");
+                //notification.success("success");
             },
-            autoSync: true,
+            //autoSync: true,
             schema: {
                 model: {
-                    id: "ProductID",
                     fields: {
-                        "ProductID": { editable: false, nullable: true },
-                        "CreatedAt": { type: "date" },
-                        "UnitPrice": { type: "number" }
+                        "connections": { type: "number" },
+                        "touch": { type: "number" },
+                        "video": { type: "number" }
                     }
-                },
-                data: "data"
+                }
             },
-            sort: [{ field: "CreatedAt", dir: "desc"}],
             transport: {
-                push: function (options) {
-                    console.log(options);
-                    //Listen to the "message" event fired when the server pushes data
-                    //                    ws.addEventListener("message", function (e) {
-                    //                        var result = JSON.parse(e.data);
-
-                    //                        //Check what the push type is and invoke the corresponding callback.
-                    //                        if (result.type == "push-update") {
-                    //                            options.pushUpdate(result);
-                    //                        } else if (result.type == "push-destroy") {
-                    //                            options.pushDestroy(result);
-                    //                        } else if (result.type == "push-create") {
-                    //                            options.pushCreate(result);
-                    //                        }
-                    //                    });
-
+                push: function (callbacks) {
+                    console.log(callbacks);
+                    consumer.on("create", function(result) {
+                      console.log("push create");
+                      callbacks.pushCreate(result);
+                    });
+                    consumer.on("update", function(result) {
+                      console.log("push update");
+                      console.log(result);
+                      callbacks.pushUpdate(result);
+                    });
+                    consumer.on("destroy", function(result) {
+                      console.log("push destroy");
+                      callbacks.pushDestroy(result);
+                    });
                 },
-                read: function (options) {
-                    var request = { type: "read" };
-
-//                    send(ws, request, function (result) {
-//                        options.success(result);
-//                    });
-                },
-                update: function (options) {
-                    var request = { type: "update", data: [options.data] };
-
-                    //send(ws, request, options.success);
-                },
-                destroy: function (options) {
-                    var request = { type: "destroy", data: [options.data] };
-
-                    //send(ws, request, options.success);
-                },
-                create: function (options) {
-                    var request = { type: "create", data: [options.data] };
-
-                    //send(ws, request, options.success);
+                read: function() {
                 }
             }
         }
@@ -349,4 +325,3 @@ function InitializeGauge() {
         }
     });
 }
-
