@@ -16,7 +16,7 @@ var stats = {
   pages: {}
 };
 
-var workOrderJson = JSON.parse(fs.readFileSync("data/workOrder - Stripped2.js", 'utf8'));
+//var workOrderJson = JSON.parse(fs.readFileSync("data/workOrder - Stripped2.js", 'utf8'));
 
 var initialStatsArray =
 [
@@ -76,12 +76,13 @@ capture.on('connection', function (socket) {
         console.log(stats);
         consumer.emit('stats-updated', stats);
 
-//        if (uniqueID < 5)
-//            consumer.emit('create', stats);
-//        else {
-            stats.touch = 1;
+        //        if (uniqueID < 5)
+        //            consumer.emit('create', stats);
+        //        else {
+        stats.touch = 1;
+        console.log("Updating consumer");
         consumer.emit('update', stats);
-//        }
+        //        }
     });
 
     socket.on('disconnect', function () {
@@ -101,13 +102,14 @@ capture.on('connection', function (socket) {
 });
 
 var consumer = io.of( '/consumer' );
-consumer.on( 'connection', function( socket ) {
-  // Send an update to the newly connected consumer socket
+consumer.on('connection', function (socket) {
+    // Send an update to the newly connected consumer socket
     socket.emit('stats-updated', stats);
-    socket.emit( 'create', initialStatsArray );
-  //  socket.emit('create', workOrderJson);
-  //socket.emit('create', workOrderArray);
-    
+    console.log("Consumer connected");
+    socket.emit('create', initialStatsArray);
+    //  socket.emit('create', workOrderJson);
+    //socket.emit('create', workOrderArray);
+
 });
 
 server.listen( 3000, function(){
