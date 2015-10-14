@@ -127,16 +127,16 @@ function InitializeGrid() {
         //                    { field: "wo_status", title: "Status" },
         //                    { field: "wo_seq", title: "Sequence" }
         //                ],
-//        columns: [
-//                    { field: "wo_mstr.wo_nbr", title: "Number" },
-//                    { field: "wo_mstr.wo_status", title: "Status" },
-//                    { field: "wo_mstr.wo_seq", title: "Sequence" }
-//                ],
+        columns: [
+                    { field: "wo_mstr.wo_nbr", title: "Number" },
+                    { field: "wo_mstr.wo_status", title: "Status" },
+                    { field: "wo_mstr.wo_seq", title: "Sequence" }
+                ],
 
         toolbar: ["create"],
         dataSource: {
             // Handle the push event to display notifications when push updates arrive
-            data: products,
+            //data: products,
             push: function (e) {
                 //var notification = $("#notification").data("kendoNotification");
                 //notification.success("success");
@@ -145,13 +145,13 @@ function InitializeGrid() {
             schema: {
 
 
-                model: {
-                    fields: {
-                        "connections": { type: "number" },
-                        "touch": { type: "number" },
-                        "video": { type: "number" }
-                    }
-                }
+//                model: {
+//                    fields: {
+//                        "connections": { type: "number" },
+//                        "touch": { type: "number" },
+//                        "video": { type: "number" }
+//                    }
+//                }
 
                 //                model: {
                 //                    fields: {
@@ -161,13 +161,13 @@ function InitializeGrid() {
                 //                    }
                 //                }
 
-                //                model: {
-                //                    fields: {
-                //                        'wo_mstr_wo_nbr': { type: "string" },
-                //                        'wo_mstr_wo_status': { type: "string" },
-                //                        'wo_mstr_wo_seq': { type: "number" }
-                //                    }
-                //                }
+                                model: {
+                                    fields: {
+                                        'wo_mstr.wo_nbr': { type: "string" },
+                                        'wo_mstr.wo_status': { type: "string" },
+                                        'wo_mstr.wo_seq': { type: "number" }
+                                    }
+                                }
 
 
 

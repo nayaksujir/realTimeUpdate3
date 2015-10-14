@@ -16,7 +16,7 @@ var stats = {
   pages: {}
 };
 
-var workOrderJson = JSON.parse(fs.readFileSync("data/workOrder - Stripped2.js", 'utf8'));
+var workOrderJson = JSON.parse(fs.readFileSync("data/workOrder.js", 'utf8'));
 
 var initialStatsArray =
 [
@@ -27,12 +27,12 @@ var initialStatsArray =
  { id: 4, connections: 0, touch: 99, video: 1, pages: {} },
  ]
 
-var workOrderArray =
-[
- { wo_nbr: "AAA", wo_status: "R", wo_seq: 2 },
- { wo_nbr: "BBB", wo_status: "E", wo_seq: 1 },
- { wo_nbr: "CCC", wo_status: "A", wo_seq: 3 }
- ]
+//var workOrderArray =
+//[
+// { wo_nbr: "AAA", wo_status: "R", wo_seq: 2 },
+// { wo_nbr: "BBB", wo_status: "E", wo_seq: 1 },
+// { wo_nbr: "CCC", wo_status: "A", wo_seq: 3 }
+// ]
 
 //var workOrderArray =
 //[
@@ -104,8 +104,8 @@ var consumer = io.of( '/consumer' );
 consumer.on( 'connection', function( socket ) {
   // Send an update to the newly connected consumer socket
     socket.emit('stats-updated', stats);
-    socket.emit( 'create', initialStatsArray );
-  //  socket.emit('create', workOrderJson);
+   //socket.emit( 'create', initialStatsArray );
+    socket.emit('create', workOrderJson);
   //socket.emit('create', workOrderArray);
     
 });
