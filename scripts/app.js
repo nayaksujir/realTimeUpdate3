@@ -116,11 +116,23 @@ function InitializeGrid() {
         //autoBind: false,
         editable: true,
         sortable: true,
-        columns: [
-                    { field: "connections", title: "Connections" },
-                    { field: "touch", title: "Touch" },
-                    { field: "video", title: "Video" }
-                ],
+                columns: [
+                            { field: "id", title: "ID" },
+                            { field: "connections", title: "Connections" },
+                            { field: "touch", title: "Touch" },
+                            { field: "video", title: "Video" }
+                        ],
+        //        columns: [
+        //                    { field: "wo_nbr", title: "Number" },
+        //                    { field: "wo_status", title: "Status" },
+        //                    { field: "wo_seq", title: "Sequence" }
+        //                ],
+//        columns: [
+//                    { field: "wo_mstr.wo_nbr", title: "Number" },
+//                    { field: "wo_mstr.wo_status", title: "Status" },
+//                    { field: "wo_mstr.wo_seq", title: "Sequence" }
+//                ],
+
         toolbar: ["create"],
         dataSource: {
             // Handle the push event to display notifications when push updates arrive
@@ -131,6 +143,8 @@ function InitializeGrid() {
             },
             //autoSync: true,
             schema: {
+
+
                 model: {
                     fields: {
                         "connections": { type: "number" },
@@ -138,25 +152,45 @@ function InitializeGrid() {
                         "video": { type: "number" }
                     }
                 }
+
+                //                model: {
+                //                    fields: {
+                //                        'wo_nbr': { type: "string" },
+                //                        'wo_status': { type: "string" },
+                //                        'wo_seq': { type: "number" }
+                //                    }
+                //                }
+
+                //                model: {
+                //                    fields: {
+                //                        'wo_mstr_wo_nbr': { type: "string" },
+                //                        'wo_mstr_wo_status': { type: "string" },
+                //                        'wo_mstr_wo_seq': { type: "number" }
+                //                    }
+                //                }
+
+
+
             },
             transport: {
                 push: function (callbacks) {
                     console.log(callbacks);
-                    consumer.on("create", function(result) {
-                      console.log("push create");
-                      callbacks.pushCreate(result);
+                    consumer.on("create", function (result) {
+                        console.log(result);
+                        console.log("push create");
+                        callbacks.pushCreate(result);
                     });
-                    consumer.on("update", function(result) {
-                      console.log("push update");
-                      console.log(result);
-                      callbacks.pushUpdate(result);
+                    consumer.on("update", function (result) {
+                        console.log("push update");
+                        console.log(result);
+                        callbacks.pushUpdate(result);
                     });
-                    consumer.on("destroy", function(result) {
-                      console.log("push destroy");
-                      callbacks.pushDestroy(result);
+                    consumer.on("destroy", function (result) {
+                        console.log("push destroy");
+                        callbacks.pushDestroy(result);
                     });
                 },
-                read: function() {
+                read: function () {
                 }
             }
         }
