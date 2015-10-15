@@ -55,10 +55,19 @@
 } ());
 
 function InitializeGrid() {
+    var gridInitialized = false;
 
     var consumer = io('http://127.0.0.1:3000/consumer');
-    consumer.on('stats-updated', function (update) {
-        console.log("received");
+    
+    
+    consumer.on('connected', function (update) {
+        
+        if(gridInitialized) {
+            return;
+        }
+        
+        gridInitialized = true;
+        consumer.emit("getFullData");
     });
 
 //    var host = "wss://kendoui-ws-demo.herokuapp.com";
@@ -117,12 +126,6 @@ function InitializeGrid() {
         editable: true,
         sortable: true,
                 columns: [
-//                            { field: "id", title: "ID" },
-//                            { field: "connections", title: "Connections" },
-//                            { field: "touch", title: "Touch" },
-//                            { field: "video", title: "Video" }
-                        ],
-                columns: [
                             { field: "wo_lot", title: "ID" },
                             { field: "wo_status", title: "Status" },
                             { field: "wo_seq", title: "Sequence" }
@@ -141,8 +144,8 @@ function InitializeGrid() {
         toolbar: ["create"],
         dataSource: {
 
-          
-  
+
+
             // Handle the push event to display notifications when push updates arrive
             //data: products,
             push: function (e) {
@@ -162,8 +165,8 @@ function InitializeGrid() {
 //                }
 
                                 model: {
+                                    id: 'wo_lot',
                                     fields: {
-                                        'wo_lot': { type: "string" },
                                         'wo_status': { type: "string" },
                                         'wo_seq': { type: "number" }
                                     }
@@ -188,7 +191,7 @@ function InitializeGrid() {
 
             },
 
-            sort: { field: "wo_seq", dir: "asc" },
+            sort: { field: "wo_seq", dir: "desc" },
 
             transport: {
                 push: function (callbacks) {
@@ -197,7 +200,7 @@ function InitializeGrid() {
                         console.log(result);
                         console.log("push create");
                         callbacks.pushCreate(result);
-                        
+
                     });
                     consumer.on("update", function (result) {
                         console.log("push update");

@@ -89,7 +89,7 @@ capture.on('connection', function (socket) {
         stats.pages[data.url] = ++pageCount;
 
         console.log(stats);
-        consumer.emit('stats-updated', stats);
+       // consumer.emit('stats-updated', stats);
 
         //        if (uniqueID < 5)
         //            consumer.emit('create', stats);
@@ -136,13 +136,16 @@ capture.on('connection', function (socket) {
 
 var consumer = io.of( '/consumer' );
 consumer.on('connection', function (socket) {
-    // Send an update to the newly connected consumer socket
-    socket.emit('stats-updated', stats);
-    //socket.emit( 'create', initialStatsArray );
-    console.log("Comsumer connection");
-    socket.emit('create', workOrderJson);
-    //socket.emit('create', workOrderArray);
+    //socket.emit( 'create', initialStatsArray );    
+    socket.on("getFullData", function() {
+        socket.emit('create', workOrderJson);
+    });
+    
+    socket.emit("connected");
+});
 
+consumer.on('reconnect', function(socket) {
+   console.log("!!!!!RECCONECT"); 
 });
 
 server.listen( 3000, function(){
