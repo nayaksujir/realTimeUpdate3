@@ -3,11 +3,8 @@
     "StartRowIdParams": "wo_mstr,0x00000000000b690f",
     "EndRowIdParams": "wo_mstr,0x0000000000b2bc10"
   },
-  "data": [
-
-    {
+  "data": [{
       "wo_mstr.wo_part": "62050",
-      "local_variables.local-var04": "Beryllium Copper Discrete PO",
       "wo_mstr.wo_nbr": "02100002",
       "wo_mstr.wo_lot": "2329270",
       "wo_mstr.wo_line": "",
