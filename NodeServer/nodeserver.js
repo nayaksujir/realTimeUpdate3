@@ -17,6 +17,21 @@ var stats = {
 };
 
 var workOrderJson = JSON.parse(fs.readFileSync("data/workOrder.js", 'utf8'));
+var workOrderJson = workOrderJson.data;
+var stringifiedWorkOrder = JSON.stringify(workOrderJson);
+workOrderJson = JSON.parse(stringifiedWorkOrder.replace(/wo_mstr\./g, ''));
+
+var workOrderJsonOne = JSON.parse(fs.readFileSync("data/workOrder - OneWO.js", 'utf8'));
+var workOrderJsonOne = workOrderJsonOne.data;
+var stringifiedWorkOrder = JSON.stringify(workOrderJsonOne);
+workOrderJsonOne = JSON.parse(stringifiedWorkOrder.replace(/wo_mstr\./g, ''));
+
+var workOrderJsonTwo = JSON.parse(fs.readFileSync("data/workOrder - TwoWO.js", 'utf8'));
+var workOrderJsonTwo = workOrderJsonTwo.data;
+var stringifiedWorkOrder = JSON.stringify(workOrderJsonTwo);
+workOrderJsonTwo = JSON.parse(stringifiedWorkOrder.replace(/wo_mstr\./g, ''));
+
+console.log(workOrderJsonOne);
 
 var initialStatsArray =
 [
@@ -76,12 +91,31 @@ capture.on('connection', function (socket) {
         console.log(stats);
         consumer.emit('stats-updated', stats);
 
-//        if (uniqueID < 5)
-//            consumer.emit('create', stats);
-//        else {
-            stats.touch = 1;
-        consumer.emit('update', stats);
-//        }
+        //        if (uniqueID < 5)
+        //            consumer.emit('create', stats);
+        //        else {
+
+
+
+        //workOrderJsonOne[1].wo_seq = uniqueID;
+
+
+        stats.touch = 1;
+        //consumer.emit('update', stats);
+        if (uniqueID % 2 == 0) {
+            workOrderJsonOne[0].wo_seq = uniqueID;
+            console.log("emitted for " + workOrderJsonOne[0].wo_lot + "Seq:" + workOrderJsonOne[0].wo_seq);
+            consumer.emit('update', workOrderJsonOne);
+
+        }
+        else {
+            workOrderJsonTwo[0].wo_seq = uniqueID;
+            console.log("emitted for " + workOrderJsonTwo[0].wo_lot + "Seq:" + workOrderJsonTwo[0].wo_seq);
+            consumer.emit('update', workOrderJsonTwo);
+        }
+
+
+        //        }
     });
 
     socket.on('disconnect', function () {
@@ -101,13 +135,14 @@ capture.on('connection', function (socket) {
 });
 
 var consumer = io.of( '/consumer' );
-consumer.on( 'connection', function( socket ) {
-  // Send an update to the newly connected consumer socket
+consumer.on('connection', function (socket) {
+    // Send an update to the newly connected consumer socket
     socket.emit('stats-updated', stats);
-   //socket.emit( 'create', initialStatsArray );
+    //socket.emit( 'create', initialStatsArray );
+    console.log("Comsumer connection");
     socket.emit('create', workOrderJson);
-  //socket.emit('create', workOrderArray);
-    
+    //socket.emit('create', workOrderArray);
+
 });
 
 server.listen( 3000, function(){

@@ -117,24 +117,32 @@ function InitializeGrid() {
         editable: true,
         sortable: true,
                 columns: [
-                            { field: "id", title: "ID" },
-                            { field: "connections", title: "Connections" },
-                            { field: "touch", title: "Touch" },
-                            { field: "video", title: "Video" }
+//                            { field: "id", title: "ID" },
+//                            { field: "connections", title: "Connections" },
+//                            { field: "touch", title: "Touch" },
+//                            { field: "video", title: "Video" }
                         ],
-        //        columns: [
-        //                    { field: "wo_nbr", title: "Number" },
-        //                    { field: "wo_status", title: "Status" },
-        //                    { field: "wo_seq", title: "Sequence" }
-        //                ],
-        columns: [
-                    { field: "wo_mstr.wo_nbr", title: "Number" },
-                    { field: "wo_mstr.wo_status", title: "Status" },
-                    { field: "wo_mstr.wo_seq", title: "Sequence" }
-                ],
+                columns: [
+                            { field: "wo_lot", title: "ID" },
+                            { field: "wo_status", title: "Status" },
+                            { field: "wo_seq", title: "Sequence" }
+                        ],
+//        columns: [
+//                    { field: "wo_mstr.wo_lot", title: "Number" },
+//                    { field: "wo_mstr.wo_status", title: "Status" },
+//                    { field: "wo_mstr.wo_seq", title: "Sequence" }
+//                ],
+//        columns: [
+//                    { field: "wo_mstr-wo_lot", title: "Number" },
+//                    { field: "wo_mstr-wo_status", title: "Status" },
+//                    { field: "wo_mstr-wo_seq", title: "Sequence" }
+//                ],
 
         toolbar: ["create"],
         dataSource: {
+
+          
+  
             // Handle the push event to display notifications when push updates arrive
             //data: products,
             push: function (e) {
@@ -153,25 +161,35 @@ function InitializeGrid() {
 //                    }
 //                }
 
-                //                model: {
-                //                    fields: {
-                //                        'wo_nbr': { type: "string" },
-                //                        'wo_status': { type: "string" },
-                //                        'wo_seq': { type: "number" }
-                //                    }
-                //                }
-
                                 model: {
                                     fields: {
-                                        'wo_mstr.wo_nbr': { type: "string" },
-                                        'wo_mstr.wo_status': { type: "string" },
-                                        'wo_mstr.wo_seq': { type: "number" }
+                                        'wo_lot': { type: "string" },
+                                        'wo_status': { type: "string" },
+                                        'wo_seq': { type: "number" }
                                     }
                                 }
 
+//                                model: {
+//                                    fields: {
+//                                        'wo_mstr.wo_lot': { type: "string" },
+//                                        'wo_mstr.wo_status': { type: "string" },
+//                                        'wo_mstr.wo_seq': { type: "number" }
+//                                    }
+//                                }
+
+//                                model: {
+//                                    fields: {
+//                                        'wo_mstr-wo_lot': { type: "string" },
+//                                        'wo_mstr-wo_status': { type: "string" },
+//                                        'wo_mstr-wo_seq': { type: "number" }
+//                                    }
+//                                }
 
 
             },
+
+            sort: { field: "wo_seq", dir: "asc" },
+
             transport: {
                 push: function (callbacks) {
                     console.log(callbacks);
@@ -179,6 +197,7 @@ function InitializeGrid() {
                         console.log(result);
                         console.log("push create");
                         callbacks.pushCreate(result);
+                        
                     });
                     consumer.on("update", function (result) {
                         console.log("push update");
